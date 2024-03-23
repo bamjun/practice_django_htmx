@@ -2,7 +2,7 @@
 [유튜브](https://www.youtube.com/watch?v=SQ4A7Q6_md8)  
 
 OS : windows11  
-shell : bash shell  
+Terminal : bash shell  
 
 
 ---  
@@ -266,6 +266,37 @@ shell : bash shell
   def home_view(request):
     return render(request, 'home.html')
   ```
+  ```diff
+    from django.shortcuts import render
+
+    # Create your views here.
+
+  + def home_view(request):
+  +   return render(request, 'home.html')
+  ```
+
+  <br>
+ 
+- path 추가 하기.  
+  
+  &darr; `a_core/` &darr; `urls.py`
+  ```python
+  urlpatterns = [
+      ...
+      path('', home_view, name='home'),
+  ]
+  ```
+  ```diff
+    from django.contrib import admin
+    from django.urls import path
+    from a_home.views import *
+
+    urlpatterns = [
+        path('admin/', admin.site.urls),
+  +     path('', home_view, name='home'),
+    ]
+  ```
+
 
   <br>
  
@@ -278,6 +309,16 @@ shell : bash shell
 
   <br>
  
+- 
+  
+  &darr; `/` &darr; `bash shell`
+  ```bash
+  
+  ```
+
+  <br>
+ 
+
 <br>  
 
 <br>  
