@@ -1,7 +1,34 @@
 [깃링크](https://github.com/andyjud/django-starter-assets)  
-
-
 https://youtu.be/SQ4A7Q6_md8?t=799
+
+OS : windows11
+shell :: bash shell
+
+
+---  
+
+# 1. 초기세팅    
+
+- 가상환경 만들기  
+  
+  **&darr;** `bash shell` &darr;
+  ```bash  
+  python -m venv .venv  
+  ```  
+
+<br>  
+
+- 가상환경 진입 파일만들기  
+  
+  `bash shell`
+  ```bash
+  echo ". '.venv/Scripts/activate'" > v
+  ```  
+
+  <br>
+
+- 
+
 
 
 
