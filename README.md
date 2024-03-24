@@ -76,6 +76,200 @@ Terminal : bash shell
 
   <br>
 
+- `.gitignore` 파일 만들기  
+  - 깃허브에 업로드시 업로드 필요없는 파일 제외하기 위한 파일작성  
+  - `.gitignore` 파일생성
+    
+    &darr; `/` &darr; `bash shell`
+    ```bash  
+    touch .gitignore
+    ```
+
+  - 가상환경 진입을 위해 생성한 `v` 파일과 가상환경 파일 `.venv` 폴더 그리고 나머지 장고관련 파일은 **[gitignore.io](https://www.toptal.com/developers/gitignore)** 사이트에서 "django" 검색해서 나오는 내용 넣기. (아래 내용으로 넣으면 됨)  
+
+    &darr; `/` &darr; `.gitignore`
+    ```txt
+    v
+    # Created by https://www.toptal.com/developers/gitignore/api/django
+    # Edit at https://www.toptal.com/developers/gitignore?templates=django
+
+    ### Django ###
+    *.log
+    *.pot
+    *.pyc
+    __pycache__/
+    local_settings.py
+    db.sqlite3
+    db.sqlite3-journal
+    media
+
+    # If your build process includes running collectstatic, then you probably don't need or want to include staticfiles/
+    # in your Git repository. Update and uncomment the following line accordingly.
+    # <django-project-name>/staticfiles/
+
+    ### Django.Python Stack ###
+    # Byte-compiled / optimized / DLL files
+    *.py[cod]
+    *$py.class
+
+    # C extensions
+    *.so
+
+    # Distribution / packaging
+    .Python
+    build/
+    develop-eggs/
+    dist/
+    downloads/
+    eggs/
+    .eggs/
+    lib/
+    lib64/
+    parts/
+    sdist/
+    var/
+    wheels/
+    share/python-wheels/
+    *.egg-info/
+    .installed.cfg
+    *.egg
+    MANIFEST
+
+    # PyInstaller
+    #  Usually these files are written by a python script from a template
+    #  before PyInstaller builds the exe, so as to inject date/other infos into it.
+    *.manifest
+    *.spec
+
+    # Installer logs
+    pip-log.txt
+    pip-delete-this-directory.txt
+
+    # Unit test / coverage reports
+    htmlcov/
+    .tox/
+    .nox/
+    .coverage
+    .coverage.*
+    .cache
+    nosetests.xml
+    coverage.xml
+    *.cover
+    *.py,cover
+    .hypothesis/
+    .pytest_cache/
+    cover/
+
+    # Translations
+    *.mo
+
+    # Django stuff:
+
+    # Flask stuff:
+    instance/
+    .webassets-cache
+
+    # Scrapy stuff:
+    .scrapy
+
+    # Sphinx documentation
+    docs/_build/
+
+    # PyBuilder
+    .pybuilder/
+    target/
+
+    # Jupyter Notebook
+    .ipynb_checkpoints
+
+    # IPython
+    profile_default/
+    ipython_config.py
+
+    # pyenv
+    #   For a library or package, you might want to ignore these files since the code is
+    #   intended to run in multiple environments; otherwise, check them in:
+    # .python-version
+
+    # pipenv
+    #   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
+    #   However, in case of collaboration, if having platform-specific dependencies or dependencies
+    #   having no cross-platform support, pipenv may install dependencies that don't work, or not
+    #   install all needed dependencies.
+    #Pipfile.lock
+
+    # poetry
+    #   Similar to Pipfile.lock, it is generally recommended to include poetry.lock in version control.
+    #   This is especially recommended for binary packages to ensure reproducibility, and is more
+    #   commonly ignored for libraries.
+    #   https://python-poetry.org/docs/basic-usage/#commit-your-poetrylock-file-to-version-control
+    #poetry.lock
+
+    # pdm
+    #   Similar to Pipfile.lock, it is generally recommended to include pdm.lock in version control.
+    #pdm.lock
+    #   pdm stores project-wide configurations in .pdm.toml, but it is recommended to not include it
+    #   in version control.
+    #   https://pdm.fming.dev/#use-with-ide
+    .pdm.toml
+
+    # PEP 582; used by e.g. github.com/David-OConnor/pyflow and github.com/pdm-project/pdm
+    __pypackages__/
+
+    # Celery stuff
+    celerybeat-schedule
+    celerybeat.pid
+
+    # SageMath parsed files
+    *.sage.py
+
+    # Environments
+    .env
+    .venv
+    env/
+    venv/
+    ENV/
+    env.bak/
+    venv.bak/
+
+    # Spyder project settings
+    .spyderproject
+    .spyproject
+
+    # Rope project settings
+    .ropeproject
+
+    # mkdocs documentation
+    /site
+
+    # mypy
+    .mypy_cache/
+    .dmypy.json
+    dmypy.json
+
+    # Pyre type checker
+    .pyre/
+
+    # pytype static type analyzer
+    .pytype/
+
+    # Cython debug symbols
+    cython_debug/
+
+    # PyCharm
+    #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
+    #  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
+    #  and can be added to the global gitignore or merged into this file.  For a more nuclear
+    #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
+    #.idea/
+
+    # End of https://www.toptal.com/developers/gitignore/api/django
+    
+
+    ```  
+
+<br>  
+
 ---  
 
 # 2. 장고 설정  
@@ -646,6 +840,281 @@ Terminal : bash shell
 
   </body>
   </html>
+  ```
+
+  <br>
+ 
+- `base.html`에서 메세지를 `messages.html` 파일로 분리하기  
+  - `messages.html`파일 생성하기  
+  
+    &darr; `/` &darr; `bash shell`
+    ```bash
+    mkdir templates/includes/ && touch templates/includes/messages.html  
+    ```
+  - `base.html`에서 메세지 부분 잘라내기  
+    &darr; `templates/` &darr; `base.html`
+    ```html
+    ...
+    {% include 'includes/messages.html' %}
+    ...
+    ```
+    ```diff
+      {% load static %}
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+          <meta charset="UTF-8">
+          <meta http-equiv="X-UA-Compatible" content="IE=edge">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Project Title</title>
+          <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
+          <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+          <script src="https://unpkg.com/htmx.org/dist/htmx.js" defer></script>
+          <script src="https://cdn.tailwindcss.com"></script>
+          <style type="text/tailwindcss">
+              [x-cloak] { 
+                  display: none !important; 
+              }
+              h1 {
+                  @apply text-4xl font-bold mb-4
+              }
+              h2 {
+                  @apply text-xl font-bold mb-2
+              }
+              p {
+                  @apply mb-4
+              }
+              .button, button, [type='submit'], [type='button'] {
+                  @apply bg-indigo-600 text-white font-bold px-6 py-4 inline-block 
+                  rounded-lg shadow-lg transition-all cursor-pointer
+              }
+              .button:hover, button:hover, [type='submit']:hover, [type='button']:hover {
+                  @apply bg-indigo-700
+              }
+              .button:active, button:active, [type='submit']:active, [type='button']:active {
+                  @apply scale-95
+              }
+              .button.alert, button.alert {
+                  @apply bg-red-700
+              }
+              .button.alert:hover, button.alert:hover {
+                  @apply bg-red-600
+              }
+              .button-red {
+                  @apply !bg-red-500 hover:!bg-red-600
+              }
+              .button-gray {
+                  @apply !bg-gray-300 hover:!bg-[#c3c9d0]
+              }
+              .navitems>li>a {
+                  @apply flex items-center gap-2 h-12 px-4 hover:bg-gray-700 rounded-lg;
+              }
+              .hoverlist>* {
+                  @apply hover:bg-gray-100 rounded-md transition duration-150;
+              }
+              .hoverlist>*>a {
+                  @apply flex items-center p-2;
+              }
+              .highlight {
+                  @apply !bg-indigo-100;
+              }
+              .allauth content a {
+                  @apply underline underline-offset-2
+              }
+              .allauth content a:hover {
+                  @apply text-indigo-500
+              }
+              .allauth form[action="/accounts/signup/"] ul {
+                  @apply hidden
+              }
+              .allauth form[action="/accounts/signup/"] ul.errorlist {
+                  @apply block
+              }
+              .allauth .helptext {
+                  @apply block mt-4
+              }
+              label {
+                  @apply hidden
+              }
+              input[type=file] {
+                  @apply bg-white pl-0
+              }
+              .textarea, textarea, input {
+                  @apply w-full rounded-lg py-4 px-5 bg-gray-100
+              }
+              .errorlist li {
+                  @apply p-1 pl-4 border-l-red-500 border-l-4 border-solid mb-2 text-red-500
+              }
+              label[for="id_remember"] {
+                  @apply inline-block w-auto mr-2
+              }
+              input[name="remember"] {
+                  @apply w-auto
+              }
+              .alert-info { @apply bg-blue-300 }
+              .alert-success { @apply bg-green-400 }
+              .alert-warning { @apply bg-amber-400 }
+              .alert-danger { @apply bg-amber-500 }
+          </style>
+      </head>
+      <body class="{% block class %}{% endblock %}">
+      	
+    +     {% include 'includes/messages.html' %}
+    -     <messages>
+    -         {% if messages %}
+    -         <div x-data="{ showMessage: false }" >
+    -         {% for message in messages %}
+    -         <div class="absolute left-0 right-0 max-w-xl mx-auto mt-3 px-4 z-50 ">
+    -             <div x-cloak class="alert-{{ message.tags }} flex items-center py-3 pl-6 pr-4 bg-blue-500 text-white rounded-lg" role="alert"
+    -             x-show="showMessage" 
+    -             x-init="setTimeout(() => showMessage = true, 200), setTimeout(() => showMessage = false, 6000)"
+    -             x-transition:enter="duration-700 ease-out"
+    -             x-transition:enter-start="opacity-0 -translate-y-5"
+    -             x-transition:enter-end="opacity-100 translate-y-0"
+    -             x-transition:leave="duration-200 ease-in"
+    -             x-transition:leave-start="opacity-100 translate-y-0"
+    -             x-transition:leave-end="opacity-0 -translate-y-5">
+    -                 <div>
+    -                     <div class="text-lg">{{ message }}</div>
+    -                 </div>
+    -                 <div class="ml-auto cursor-pointer" @click="showMessage = false">
+    -                     <svg fill="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" stroke="currentColor" class="w-8 h-8 ml-2">
+    -                         <path d="M6 18L18 6M6 6l12 12"></path>
+    -                     </svg>
+    -                 </div>
+    -             </div> 
+    -         </div>
+    -         {% endfor %}
+    -         </div>
+    -         {% endif %}
+    -     </messages>
+
+          <header class="flex items-center justify-between bg-gray-800 h-20 px-8 text-white sticky top-0 z-40">
+              <div>
+                  <a class="flex items-center gap-2" href="/">
+                      <img class="h-6" src="/static/images/logo.svg" alt="Logo"/>
+                      <span class="text-lg font-bold">Project Title</span>
+                  </a>
+              </div>
+              <nav class="block bg-gray-800 relative">
+                  <ul class="navitems flex items-center justify-center h-full">
+                      {% if request.user.is_authenticated %}
+                      <li><a href="/">Home</a></li>
+                      <li x-data="{ dropdownOpen: false }" class="relative">
+                          <a @click="dropdownOpen = !dropdownOpen" @click.away="dropdownOpen = false" class="cursor-pointer select-none">
+                              <img class="h-8 w-8 rounded-full object-cover" src=""/>
+                              Username
+                              <img x-bind:class="dropdownOpen && 'rotate-180 duration-300'" class="w-4" src="https://img.icons8.com/small/32/777777/expand-arrow.png"/>
+                          </a>
+                          <div x-show="dropdownOpen" x-cloak class="absolute right-0 bg-white text-black shadow rounded-lg w-40 p-2 z-20"
+                          x-transition:enter="duration-300 ease-out"
+                          x-transition:enter-start="opacity-0 -translate-y-5 scale-90"
+                          x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+                          >
+                              <ul class="hoverlist [&>li>a]:justify-end">
+                                  <li><a href="">My Profile</a></li>
+                                  <li><a href="">Edit Profile</a></li>
+      			    <li><a href="">Settings</a></li>
+                                  <li><a href="">Log Out</a></li>
+                              </ul>
+                          </div>
+                      </li>
+                      
+                      {% else %}
+      		<li><a href="">Login</a></li>
+                      <li><a href="">Signup</a></li>
+                      {% endif %}
+                  </ul>
+              </nav>
+          </header>
+
+          <content class="block w-full">
+              <div class="max-w-4xl mx-auto px-8 py-24">
+                  <h1>New Project</h1>
+              </div>
+          </content>
+
+      </body>
+      </html>
+    ```
+  - `messages.html`파일에 메세지 코드 붙여넣기  
+
+    &darr; `templates/includes/` &darr; `messages.html`  
+    ```html
+    <messages>
+        {% if messages %}
+        <div x-data="{ showMessage: false }" >
+        {% for message in messages %}
+        <div class="absolute left-0 right-0 max-w-xl mx-auto mt-3 px-4 z-50 ">
+            <div x-cloak class="alert-{{ message.tags }} flex items-center py-3 pl-6 pr-4 bg-blue-500 text-white rounded-lg" role="alert"
+            x-show="showMessage" 
+            x-init="setTimeout(() => showMessage = true, 200), setTimeout(() => showMessage = false, 6000)"
+            x-transition:enter="duration-700 ease-out"
+            x-transition:enter-start="opacity-0 -translate-y-5"
+            x-transition:enter-end="opacity-100 translate-y-0"
+            x-transition:leave="duration-200 ease-in"
+            x-transition:leave-start="opacity-100 translate-y-0"
+            x-transition:leave-end="opacity-0 -translate-y-5">
+                <div>
+                    <div class="text-lg">{{ message }}</div>
+                </div>
+                <div class="ml-auto cursor-pointer" @click="showMessage = false">
+                    <svg fill="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" stroke="currentColor" class="w-8 h-8 ml-2">
+                        <path d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </div>
+            </div> 
+        </div>
+        {% endfor %}
+        </div>
+        {% endif %}
+    </messages>
+    ```
+
+
+  <br>
+ 
+- `base.html` 파일에서 헤더부분을 `header.html` 파일로 분할하기  
+  
+  &darr; `/` &darr; `bash shell`
+  ```bash
+  
+  ```
+
+  <br>
+
+- 
+  
+  &darr; `/` &darr; `bash shell`
+  ```bash
+  
+  ```
+
+  <br>
+ 
+- 
+  
+  &darr; `/` &darr; `bash shell`
+  ```bash
+  
+  ```
+
+  <br>
+ 
+- 
+  
+  &darr; `/` &darr; `bash shell`
+  ```bash
+  
+  ```
+
+  <br>
+
+- 
+  
+  &darr; `/` &darr; `bash shell`
+  ```bash
+  
   ```
 
   <br>
