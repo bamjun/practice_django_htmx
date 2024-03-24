@@ -1252,9 +1252,9 @@ Terminal : bash shell
   <br>
     
    
-  - `beader.html`파일에 헤더코드 넣기  
+  - `header.html`파일에 헤더코드 넣기  
     
-    &darr; `/` &darr; `bash shell`
+    &darr; `templates/includes/` &darr; `header.html`
     ```html  
     <header class="flex items-center justify-between bg-gray-800 h-20 px-8 text-white sticky top-0 z-40">
         <div>
