@@ -1640,11 +1640,11 @@ Terminal : bash shell
 
   <br>
 
--   
+- `static` 파일 다운받기  
   
   &darr; `/` &darr; `bash shell`
   ```bash
-  
+  mkdir static/images && curl https://raw.githubusercontent.com/bamjun/practice_django_htmx/main/static/images/ape1.jpg --output static/images/ape1.jpg && curl https://raw.githubusercontent.com/bamjun/practice_django_htmx/main/static/images/ape2.jpg --output static/images/ape2.jpg && curl https://raw.githubusercontent.com/bamjun/practice_django_htmx/main/static/images/avatar.svg --output static/images/avatar.svg && curl https://raw.githubusercontent.com/bamjun/practice_django_htmx/main/static/images/logo.svg --output static/images/logo.svg && curl https://raw.githubusercontent.com/bamjun/practice_django_htmx/main/static/favicon.ico --output static/favicon.ico
   ```
 
   <br>
@@ -1742,3 +1742,5 @@ mkdir -p /home/user/docs/newfolder
 `-p` 옵션은 스크립트를 작성할 때 특히 유용하며, 디렉토리 구조를 프로그램적으로 생성할 때 필요한 디렉토리가 이미 있는지 확인할 필요 없이 바로 생성할 수 있게 해줍니다.
 
 ---
+
+
