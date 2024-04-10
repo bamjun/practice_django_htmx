@@ -2010,6 +2010,329 @@ Terminal : bash shell
 
   <br>
  
+- `profile.html` 코드 작성하기     
+
+  &darr; `templates/a_users/` &darr; `profile.html`
+  ```html  
+  {% extends 'layouts/blank.html' %}
+
+  {% block content %}
+
+  <div class="max-w-lg mx-auto flex flex-col items-center pt-20 px-4">
+      <img class="w-36 h-36 rounded-full object-cover mb-4" src="{{ profile.avatar }}" />
+      <div class="text-center">
+          <h1>{{ profile.name }}</h1>
+          <div class="text-gray-400 mb-2 -mt-3">@{{ profile.user.username }}</div>
+          {% if profile.info %}
+          <div class="mt-8">{{ profile.info|linebreaksbr }}</div>
+          {% endif %}  
+      </div>
+  </div>
+
+  {% endblock %}
+  ```
+
+  <br>
+  
+- `profile` url path 추가하기     
+
+  &darr; `a_core/` &darr; `urls.py`
+  ```python  
+  , include
+  ```
+  ```python
+  path('profile/', include('a_users.urls')),
+  ```
+  ```diff  
+    from django.contrib import admin
+  + from django.urls import path, include
+  - from django.urls import path
+    from a_home.views import *
+
+    urlpatterns = [
+        path('admin/', admin.site.urls),
+        path('', home_view, name='home'),
+  +     path('profile/', include('a_users.urls')),
+    ]
+  ```
+
+  <br>
+  
+- a_users에 `urls.py` 파일생성     
+
+  &darr; `/` &darr; `bash shell`
+  ```bash
+  touch a_users/urls.py
+  ```
+
+  <br>
+  
+- `a_users/urls.py`파일에 코드 작성하기     
+
+  &darr; `a_users/` &darr; `urls.py`
+  ```python
+  from django.urls import path
+  from a_users.views import *
+
+  urlpatterns = [
+      path('', profile_view, name="profile"),
+  ]
+  ```
+
+  <br>
+  
+- 헤더파일에 profile url 코드 추가하기   
+
+  &darr; `templates/includes/` &darr; `header.html`
+  ```html
+  {% url 'profile' %}
+  ```
+  ```diff  
+    <header class="flex items-center justify-between bg-gray-800 h-20 px-8 text-white sticky top-0 z-40">
+        <div>
+            <a class="flex items-center gap-2" href="/">
+                <img class="h-6" src="/static/images/logo.svg" alt="Logo"/>
+                <span class="text-lg font-bold">Project Title</span>
+            </a>
+        </div>
+        <nav class="block bg-gray-800 relative">
+            <ul class="navitems flex items-center justify-center h-full">
+                {% if request.user.is_authenticated %}
+                <li><a href="/">Home</a></li>
+                <li x-data="{ dropdownOpen: false }" class="relative">
+                    <a @click="dropdownOpen = !dropdownOpen" @click.away="dropdownOpen = false" class="cursor-pointer select-none">
+                        <img class="h-8 w-8 rounded-full object-cover" src="{{ user.profile.avatar }}"/>
+                        {{ user.profile.name }}
+                        <img x-bind:class="dropdownOpen && 'rotate-180 duration-300'" class="w-4" src="https://img.icons8.com/small/32/777777/expand-arrow.png"/>
+                    </a>
+                    <div x-show="dropdownOpen" x-cloak class="absolute right-0 bg-white text-black shadow rounded-lg w-40 p-2 z-20"
+                    x-transition:enter="duration-300 ease-out"
+                    x-transition:enter-start="opacity-0 -translate-y-5 scale-90"
+                    x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+                    >
+                        <ul class="hoverlist [&>li>a]:justify-end">
+  +                          <li><a href="{% url 'profile' %}">My Profile</a></li>
+  -                          <li><a href="">My Profile</a></li>
+                            <li><a href="">Edit Profile</a></li>
+                <li><a href="">Settings</a></li>
+                            <li><a href="">Log Out</a></li>
+                        </ul>
+                    </div>
+                </li>
+                
+                {% else %}
+        <li><a href="">Login</a></li>
+                <li><a href="">Signup</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+  ```  
+  ![alt text](images/markdown-image-6.png)  
+
+  <br>
+  
+- `a_users/forms.py` 파일 생성하기     
+
+  &darr; `/` &darr; `bash shell`
+  ```bash
+  touch a_users/forms.py
+  ```
+
+  <br>
+  
+- `forms.py` 파일작성하기     
+
+  &darr; `a_users/` &darr; `forms.py`
+  ```python  
+  class ProfileForm(ModelForm):
+      class Meta:
+          model = Profile
+          exclude = ['user']
+          widgets = {
+              'image': forms.FileInput(),
+              'displayname': forms.TextInput(attrs={'placeholder': 'Add display name'}),
+              'info': forms.Textarea(attrs={'rows':3, 'placeholder': 'add information'}),
+          }
+  ```
+
+  <br>
+  
+- a_users/views 에 profile edit 함수 추가하기     
+
+  &darr; `a_users/` &darr; `views.py`
+  ```python
+  from django.contrib.auth.decorators import login_required
+  from .forms import *
+  ```
+  ```python
+  @login_required
+  def profile_edit_view(request):
+      form = ProfileForm(instance=request.user.profile)
+      return render(request, "a_users/profile_edit.html", {"form": form})
+  ```
+  ```diff
+    from django.shortcuts import render
+  + from django.contrib.auth.decorators import login_required
+  + from .forms import *
+
+
+    def profile_view(request):
+        profile = request.user.profile
+        return render(request, "a_users/profile.html", {"profile": profile})
+
+  + @login_required
+  + def profile_edit_view(request):
+  +     form = ProfileForm(instance=request.user.profile)
+  +     return render(request, "a_users/profile_edit.html", {"form": form})
+  ```
+
+  <br>
+  
+-    
+
+  &darr; `/` &darr; `bash shell`
+  ```bash
+  ```
+
+  <br>
+  
+-    
+
+  &darr; `/` &darr; `bash shell`
+  ```bash
+  ```
+
+  <br>
+  
+-    
+
+  &darr; `/` &darr; `bash shell`
+  ```bash
+  ```
+
+  <br>
+  
+-    
+
+  &darr; `/` &darr; `bash shell`
+  ```bash
+  ```
+
+  <br>
+  
+-    
+
+  &darr; `/` &darr; `bash shell`
+  ```bash
+  ```
+
+  <br>
+  
+-    
+
+  &darr; `/` &darr; `bash shell`
+  ```bash
+  ```
+
+  <br>
+  
+-    
+
+  &darr; `/` &darr; `bash shell`
+  ```bash
+  ```
+
+  <br>
+  
+-    
+
+  &darr; `/` &darr; `bash shell`
+  ```bash
+  ```
+
+  <br>
+  
+-    
+
+  &darr; `/` &darr; `bash shell`
+  ```bash
+  ```
+
+  <br>
+  
+-    
+
+  &darr; `/` &darr; `bash shell`
+  ```bash
+  ```
+
+  <br>
+  
+-    
+
+  &darr; `/` &darr; `bash shell`
+  ```bash
+  ```
+
+  <br>
+  
+-    
+
+  &darr; `/` &darr; `bash shell`
+  ```bash
+  ```
+
+  <br>
+  
+-    
+
+  &darr; `/` &darr; `bash shell`
+  ```bash
+  ```
+
+  <br>
+  
+-    
+
+  &darr; `/` &darr; `bash shell`
+  ```bash
+  ```
+
+  <br>
+  
+-    
+
+  &darr; `/` &darr; `bash shell`
+  ```bash
+  ```
+
+  <br>
+  
+-    
+
+  &darr; `/` &darr; `bash shell`
+  ```bash
+  ```
+
+  <br>
+  
+-    
+
+  &darr; `/` &darr; `bash shell`
+  ```bash
+  ```
+
+  <br>
+  
+-    
+
+  &darr; `/` &darr; `bash shell`
+  ```bash
+  ```
+
+  <br>
+ 
 <br>  
 
 <br>  
