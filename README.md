@@ -1928,14 +1928,21 @@ Terminal : bash shell
   ```bash
   python manage.py createsuperuser
   ```
+  ![alt text](images/markdown-image-4.png)  
 
   <br>
 
-- !! 14:46  
+- 유저 아바타 웹페이지에 보이게 하기    
   
-  &darr; `/templates/includes` &darr; `heaer.html`
+  &darr; `/templates/includes` &darr; `heaer.html`  
+  ```html  
+  {{ user.profile.avatar }}
+  ```
+  ```html  
+  {{ user.profile.name }}
+  ```
   ```diff  
-  -  <header class="flex items-center justify-between bg-gray-800 h-20 px-8 text-white sticky top-0 z-40">
+    <header class="flex items-center justify-between bg-gray-800 h-20 px-8 text-white sticky top-0 z-40">
         <div>
             <a class="flex items-center gap-2" href="/">
                 <img class="h-6" src="/static/images/logo.svg" alt="Logo"/>
@@ -1948,8 +1955,10 @@ Terminal : bash shell
                 <li><a href="/">Home</a></li>
                 <li x-data="{ dropdownOpen: false }" class="relative">
                     <a @click="dropdownOpen = !dropdownOpen" @click.away="dropdownOpen = false" class="cursor-pointer select-none">
-                        <img class="h-8 w-8 rounded-full object-cover" src=""/>
-                        Username
+  +                     <img class="h-8 w-8 rounded-full object-cover" src="{{ user.profile.avatar }}"/> 
+  +                     {{ user.profile.name }}
+  -                     <img class="h-8 w-8 rounded-full object-cover" src=""/>
+  -                     Username
                         <img x-bind:class="dropdownOpen && 'rotate-180 duration-300'" class="w-4" src="https://img.icons8.com/small/32/777777/expand-arrow.png"/>
                     </a>
                     <div x-show="dropdownOpen" x-cloak class="absolute right-0 bg-white text-black shadow rounded-lg w-40 p-2 z-20"
@@ -1973,26 +1982,30 @@ Terminal : bash shell
             </ul>
         </nav>
     </header>
+  ```  
 
+  ![alt text](images/markdown-image-5.png)  
 
+  <br>
+
+- profile페이지 만들기   
+  
+  &darr; `a_users/` &darr; `views.py`
+  ```python  
+  from django.shortcuts import render
+
+  def profile_view(request):
+    profile = request.user.profile
+    return render(request, 'a_users/profile.html', {'profile':profile})
   ```
 
   <br>
 
--   
-  
+- `profile.html` 파일만들기   
+
   &darr; `/` &darr; `bash shell`
   ```bash
-  
-  ```
-
-  <br>
-
--   
-  
-  &darr; `/` &darr; `bash shell`
-  ```bash
-  
+    mkdir templates/a_users && touch templates/a_users/profile.html
   ```
 
   <br>
