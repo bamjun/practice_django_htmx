@@ -2189,59 +2189,226 @@ Terminal : bash shell
 
   <br>
   
--    
+- `profile_edit.html` 파일생성하기   
 
   &darr; `/` &darr; `bash shell`
   ```bash
+  touch templates/a_users/profile_edit.html
   ```
 
   <br>
   
--    
+- `profile_edit.html` 작성하기   
 
-  &darr; `/` &darr; `bash shell`
-  ```bash
+  &darr; `templates/a_users/` &darr; `profile_edit.html`
+  ```html
+  {% extends 'layouts/blank.html' %}
+
+  {% block content %}
+
+  <h1 class="mb-4">Edit your Profile</h1>
+
+  <div class="text-center flex flex-col items-center">
+      <img id="avatar" class="w-36 h-36 rounded-full object-cover my-4" src="{{ user.profile.avatar }}" />
+      <div class="text-center max-w-md">
+          <h1 id="displayname">{{ user.profile.displayname|default:"" }}</h1>
+          <div class="text-gray-400 mb-2 -mt-3">@{{ user.username }}</div>
+      </div>
+  </div>
+  <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" >Submit</button>
+      <a class="button button-gray ml-1" href="{{ request.META.HTTP_REFERER }}">Cancel</a>
+  </form>
+
+
+
+
+  <script>
+      
+      // This updates the avatar
+      const fileInput = document.querySelector('input[type="file"]');
+
+      fileInput.addEventListener('change', (event) => {
+      const file = event.target.files[0];
+      const image = document.querySelector('#avatar');
+
+      if (file && file.type.includes('image')) {
+          const url = URL.createObjectURL(file);
+          image.src = url;
+      }
+      });
+
+      // This updates the name
+      const display_nameInput = document.getElementById('id_displayname');
+      const display_nameOutput = document.getElementById('displayname');
+
+      display_nameInput.addEventListener('input', (event) => {
+          display_nameOutput.innerText = event.target.value;
+      });
+
+  </script>
+
+  {% endblock %}
   ```
 
   <br>
   
--    
+- urls에 path 추가하기   
 
-  &darr; `/` &darr; `bash shell`
-  ```bash
+  &darr; `a_users/` &darr; `urls.py`
+  ```python
+  path('edit/', profile_edit_view, name='profile_edit'),
+  ```
+  ```diff
+    from django.urls import path
+    from a_users.views import *
+
+    urlpatterns = [
+        path('', profile_view, name="profile"),
+  +     path('edit/', profile_edit_view, name='profile-edit'),
+    ]
   ```
 
   <br>
   
--    
+- 헤더파일에 url 추가하기   
+
+  &darr; `templates/includes/` &darr; `header.html`
+  ```html
+  {% url 'profile-edit' %}
+  ```
+  ```diff
+    <header class="flex items-center justify-between bg-gray-800 h-20 px-8 text-white sticky top-0 z-40">
+        <div>
+            <a class="flex items-center gap-2" href="/">
+                <img class="h-6" src="/static/images/logo.svg" alt="Logo"/>
+                <span class="text-lg font-bold">Project Title</span>
+            </a>
+        </div>
+        <nav class="block bg-gray-800 relative">
+            <ul class="navitems flex items-center justify-center h-full">
+                {% if request.user.is_authenticated %}
+                <li><a href="/">Home</a></li>
+                <li x-data="{ dropdownOpen: false }" class="relative">
+                    <a @click="dropdownOpen = !dropdownOpen" @click.away="dropdownOpen = false" class="cursor-pointer select-none">
+                        <img class="h-8 w-8 rounded-full object-cover" src="{{ user.profile.avatar }}"/>
+                        {{ user.profile.name }}
+                        <img x-bind:class="dropdownOpen && 'rotate-180 duration-300'" class="w-4" src="https://img.icons8.com/small/32/777777/expand-arrow.png"/>
+                    </a>
+                    <div x-show="dropdownOpen" x-cloak class="absolute right-0 bg-white text-black shadow rounded-lg w-40 p-2 z-20"
+                    x-transition:enter="duration-300 ease-out"
+                    x-transition:enter-start="opacity-0 -translate-y-5 scale-90"
+                    x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+                    >
+                        <ul class="hoverlist [&>li>a]:justify-end">
+                            <li><a href="{% url 'profile' %}">My Profile</a></li>
+  +                         <li><a href="{% url 'profile-edit' %}">Edit Profile</a></li>
+  -                         <li><a href="">Edit Profile</a></li>
+                <li><a href="">Settings</a></li>
+                            <li><a href="">Log Out</a></li>
+                        </ul>
+                    </div>
+                </li>
+                
+                {% else %}
+        <li><a href="">Login</a></li>
+                <li><a href="">Signup</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+  ```
+  ![alt text](images/markdown-image-7.png)  
+
+  <br>
+  
+- `box.html` 파일 생성하기   
 
   &darr; `/` &darr; `bash shell`
   ```bash
+  touch templates/layouts/box.html
   ```
 
   <br>
   
--    
+- `box.html` 코드 작성하기     
 
-  &darr; `/` &darr; `bash shell`
-  ```bash
+  &darr; `templates/layouts/` &darr; `box.html`
+  ```html
+  {% extends 'base.html' %}
+
+  {% block layout %}
+  <content class="block max-w-3xl mx-auto md:p-12">
+      <div class="bg-white rounded-2xl md:drop-shadow-2xl shadow-black w-full p-8">
+
+      {% block content %} 
+      {% endblock %}
+
+      </div>
+  </content>
+  {% endblock %}
   ```
 
   <br>
   
--    
+- `profile_edit.html` 수정하기   
 
   &darr; `/` &darr; `bash shell`
-  ```bash
-  ```
+  ```diff
+  +  {% extends 'layouts/box.html' %}
+  -  {% extends 'layouts/blank.html' %}
 
-  <br>
-  
--    
+    {% block content %}
 
-  &darr; `/` &darr; `bash shell`
-  ```bash
+    <h1 class="mb-4">Edit your Profile</h1>
+
+    <div class="text-center flex flex-col items-center">
+        <img id="avatar" class="w-36 h-36 rounded-full object-cover my-4" src="{{ user.profile.avatar }}" />
+        <div class="text-center max-w-md">
+            <h1 id="displayname">{{ user.profile.displayname|default:"" }}</h1>
+            <div class="text-gray-400 mb-2 -mt-3">@{{ user.username }}</div>
+        </div>
+    </div>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" >Submit</button>
+        <a class="button button-gray ml-1" href="{{ request.META.HTTP_REFERER }}">Cancel</a>
+    </form>
+
+
+
+
+    <script>
+        
+        // This updates the avatar
+        const fileInput = document.querySelector('input[type="file"]');
+
+        fileInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        const image = document.querySelector('#avatar');
+
+        if (file && file.type.includes('image')) {
+            const url = URL.createObjectURL(file);
+            image.src = url;
+        }
+        });
+
+        // This updates the name
+        const display_nameInput = document.getElementById('id_displayname');
+        const display_nameOutput = document.getElementById('displayname');
+
+        display_nameInput.addEventListener('input', (event) => {
+            display_nameOutput.innerText = event.target.value;
+        });
+
+    </script>
+
+    {% endblock %}
   ```
+  ![alt text](images/markdown-image-8.png)
 
   <br>
   
