@@ -1644,12 +1644,9 @@ Terminal : bash shell
   
   &darr; `/` &darr; `bash shell`
   ```bash
-  mkdir static/images && curl https://raw.githubusercontent.com/bamjun/practice_django_htmx/main/static/images/ape1.jpg --output static/images/ape1.jpg && curl https://raw.githubusercontent.com/bamjun/practice_django_htmx/main/static/images/ape2.jpg --output static/images/ape2.jpg && curl https://raw.githubusercontent.com/bamjun/practice_django_htmx/main/static/images/avatar.svg --output static/images/avatar.svg && curl https://raw.githubusercontent.com/bamjun/practice_django_htmx/main/static/images/logo.svg --output static/images/logo.svg && curl https://raw.githubusercontent.com/bamjun/practice_django_htmx/main/static/favicon.ico --output static/favicon.ico
+  mkdir static/images && curl https://raw.githubusercontent.com/bamjun/practice_django_htmx/main/static/images/ape1.jpg --output static/images/ape1.jpg && curl https://raw.githubusercontent.com/bamjun/practice_django_htmx/main/static/images/ape2.jpg --output static/images/ape2.jpg && curl https://raw.githubusercontent.com/bamjun/practice_django_htmx/main/static/images/avatar.svg --output static/images/avatar.svg && curl https://raw.githubusercontent.com/bamjun/practice_django_htmx/main/static/images/logo.svg --output static/images/logo.svg && curl https://raw.githubusercontent.com/bamjun/practice_django_htmx/main/static/favicon.ico --output static/favicon.ico && mkdir static/css && touch static/css/style.css
   ```
-  ```bash
-  mkdir static/css && touch static/css/style.css
-  ```
-
+  
   <br>
 
 - `static`파일 적용 확인하기    
