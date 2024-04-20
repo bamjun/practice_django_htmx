@@ -2739,30 +2739,353 @@ Terminal : bash shell
 
   <br>
   
--    2237
+- `header.html` 수정하기
 
-  &darr; `/` &darr; `bash shell`
-  ```bash
+  &darr; `templates/` &darr; `geader.html`
+  ```html
+  {% url 'account_logout' %}
+  ```
+  ```diff
+    <header class="flex items-center justify-between bg-gray-800 h-20 px-8 text-white sticky top-0 z-40">
+        <div>
+            <a class="flex items-center gap-2" href="/">
+                <img class="h-6" src="/static/images/logo.svg" alt="Logo"/>
+                <span class="text-lg font-bold">Project Title</span>
+            </a>
+        </div>
+        <nav class="block bg-gray-800 relative">
+            <ul class="navitems flex items-center justify-center h-full">
+                {% if request.user.is_authenticated %}
+                <li><a href="/">Home</a></li>
+                <li x-data="{ dropdownOpen: false }" class="relative">
+                    <a @click="dropdownOpen = !dropdownOpen" @click.away="dropdownOpen = false" class="cursor-pointer select-none">
+                        <img class="h-8 w-8 rounded-full object-cover" src="{{ user.profile.avatar }}"/>
+                        {{ user.profile.name }}
+                        <img x-bind:class="dropdownOpen && 'rotate-180 duration-300'" class="w-4" src="https://img.icons8.com/small/32/777777/expand-arrow.png"/>
+                    </a>
+                    <div x-show="dropdownOpen" x-cloak class="absolute right-0 bg-white text-black shadow rounded-lg w-40 p-2 z-20"
+                    x-transition:enter="duration-300 ease-out"
+                    x-transition:enter-start="opacity-0 -translate-y-5 scale-90"
+                    x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+                    >
+                        <ul class="hoverlist [&>li>a]:justify-end">
+                            <li><a href="{% url 'profile' %}">My Profile</a></li>
+                            <li><a href="{% url 'profile-edit' %}">Edit Profile</a></li>
+                <li><a href="">Settings</a></li>
+  -                         <li><a href="">Log Out</a></li>
+  +                         <li><a href="{% url 'account_logout' %}">Log Out</a></li>
+                        </ul>
+                    </div>
+                </li>
+                
+                {% else %}
+        <li><a href="">Login</a></li>
+                <li><a href="">Signup</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
   ```
 
   <br>
   
--    
+- `allauth` logout 페이지 커스텀을 위한, `base.html`생성하기   
 
   &darr; `/` &darr; `bash shell`
   ```bash
+  mkdir -p templates/allauth/layouts && touch templates/allauth/layouts/base.html
   ```
 
   <br>
   
--    
+- `base.html`에 코드 allauth 커스텀 레이아웃 코드 작성      
 
-  &darr; `/` &darr; `bash shell`
-  ```bash
+  &darr; `templates/allauth/layouts/` &darr; `base.html`
+  ```html
+  {% extends 'layouts/box.html' %}
+
+  {% block class %}allauth{% endblock %}
+
+  {% block content %}
+  {% endblock %}
   ```
 
   <br>
  
+- 헤더에 로그인 url 설정  
+
+  &darr; `templates/includes/` &darr; `header.html`
+  ```html
+  {% url 'account_login' %}
+  ```
+  ```diff
+    <header class="flex items-center justify-between bg-gray-800 h-20 px-8 text-white sticky top-0 z-40">
+        <div>
+            <a class="flex items-center gap-2" href="/">
+                <img class="h-6" src="/static/images/logo.svg" alt="Logo"/>
+                <span class="text-lg font-bold">Project Title</span>
+            </a>
+        </div>
+        <nav class="block bg-gray-800 relative">
+            <ul class="navitems flex items-center justify-center h-full">
+                {% if request.user.is_authenticated %}
+                <li><a href="/">Home</a></li>
+                <li x-data="{ dropdownOpen: false }" class="relative">
+                    <a @click="dropdownOpen = !dropdownOpen" @click.away="dropdownOpen = false" class="cursor-pointer select-none">
+                        <img class="h-8 w-8 rounded-full object-cover" src="{{ user.profile.avatar }}"/>
+                        {{ user.profile.name }}
+                        <img x-bind:class="dropdownOpen && 'rotate-180 duration-300'" class="w-4" src="https://img.icons8.com/small/32/777777/expand-arrow.png"/>
+                    </a>
+                    <div x-show="dropdownOpen" x-cloak class="absolute right-0 bg-white text-black shadow rounded-lg w-40 p-2 z-20"
+                    x-transition:enter="duration-300 ease-out"
+                    x-transition:enter-start="opacity-0 -translate-y-5 scale-90"
+                    x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+                    >
+                        <ul class="hoverlist [&>li>a]:justify-end">
+                            <li><a href="{% url 'profile' %}">My Profile</a></li>
+                            <li><a href="{% url 'profile-edit' %}">Edit Profile</a></li>
+                <li><a href="">Settings</a></li>
+                            <li><a href="{% url 'account_logout' %}">Log Out</a></li>
+                        </ul>
+                    </div>
+                </li>
+                
+                {% else %}
+  -             <li><a href="">Login</a></li>
+  +             <li><a href="{% url 'account_login' %}">Login</a></li>
+                <li><a href="">Signup</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+  ```
+
+  <br>  
+
+- `settings.py` 에 allauth로 로그인 했을시 리다이렉트 페이지와, 이메일 서버 설정하기   
+
+  &darr; `a_core/` &darr; `settings.py`
+  ```python
+  LOGIN_REDIRECT_URL = '/'
+
+  EMAL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+  ACCOUNT_AUTHENTICATION_METHOD = 'email'
+  ACCOUNT_EMAIL_REQUIRED = True
+  ```
+  ```diff
+  제일 하단에 추가하기
+  + LOGIN_REDIRECT_URL = '/'
+
+  + EMAL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+  + ACCOUNT_AUTHENTICATION_METHOD = 'email'
+  + ACCOUNT_EMAIL_REQUIRED = True
+  ```
+
+  <br>  
+
+- 로그인 & 로그아웃할때 상태 메세지 없애기   
+  - allauth 로그인 & 로그아웃할때 messages 로 상태 출력됨.. 없애려면, 파일만들어서, 공백으로 저자하면 됨.  
+
+  &darr; `/` &darr; `bash`  
+  ```bash
+  mkdir -p templates/account/messages/ && touch templates/account/messages/logged_in.txt && touch templates/account/messages/logged_out.txt
+  ```
+
+  <br>  
+
+-  2558
+
+  &darr; `/` &darr; `bash`
+  ```bash
+  ```
+
+  <br>  
+
+-  
+
+  &darr; `/` &darr; `bash`
+  ```bash
+  ```
+
+  <br>  
+
+-  
+
+  &darr; `/` &darr; `bash`
+  ```bash
+  ```
+
+  <br>  
+
+-  
+
+  &darr; `/` &darr; `bash`
+  ```bash
+  ```
+
+  <br>  
+
+-  
+
+  &darr; `/` &darr; `bash`
+  ```bash
+  ```
+
+  <br>  
+
+-  
+
+  &darr; `/` &darr; `bash`
+  ```bash
+  ```
+
+  <br>  
+
+-  
+
+  &darr; `/` &darr; `bash`
+  ```bash
+  ```
+
+  <br>  
+
+-  
+
+  &darr; `/` &darr; `bash`
+  ```bash
+  ```
+
+  <br>  
+
+-  
+
+  &darr; `/` &darr; `bash`
+  ```bash
+  ```
+
+  <br>  
+
+-  
+
+  &darr; `/` &darr; `bash`
+  ```bash
+  ```
+
+  <br>  
+
+-  
+
+  &darr; `/` &darr; `bash`
+  ```bash
+  ```
+
+  <br>  
+
+-  
+
+  &darr; `/` &darr; `bash`
+  ```bash
+  ```
+
+  <br>  
+
+-  
+
+  &darr; `/` &darr; `bash`
+  ```bash
+  ```
+
+  <br>  
+
+-  
+
+  &darr; `/` &darr; `bash`
+  ```bash
+  ```
+
+  <br>  
+
+-  
+
+  &darr; `/` &darr; `bash`
+  ```bash
+  ```
+
+  <br>  
+
+-  
+
+  &darr; `/` &darr; `bash`
+  ```bash
+  ```
+
+  <br>  
+
+-  
+
+  &darr; `/` &darr; `bash`
+  ```bash
+  ```
+
+  <br>  
+
+-  
+
+  &darr; `/` &darr; `bash`
+  ```bash
+  ```
+
+  <br>  
+
+-  
+
+  &darr; `/` &darr; `bash`
+  ```bash
+  ```
+
+  <br>  
+
+-  
+
+  &darr; `/` &darr; `bash`
+  ```bash
+  ```
+
+  <br>  
+
+-  
+
+  &darr; `/` &darr; `bash`
+  ```bash
+  ```
+
+  <br>  
+
+-  
+
+  &darr; `/` &darr; `bash`
+  ```bash
+  ```
+
+  <br>  
+
+-  
+
+  &darr; `/` &darr; `bash`
+  ```bash
+  ```
+
+  <br>  
+
+-  
+
+  &darr; `/` &darr; `bash`
+  ```bash
+  ```
+
+  <br>  
+
+
 <br>  
 
 <br>  
